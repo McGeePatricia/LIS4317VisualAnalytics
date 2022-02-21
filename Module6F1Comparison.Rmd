@@ -100,7 +100,7 @@ The second plot directly compares the points earned each race.
 ```{r CarPlots, echo=TRUE}
 RaceDataCar %>%
   ggplot(aes(x = `GRAND PRIX`, y = CarDev, fill = CAR))+
-  geom_bar(stat = "identity", position = position_dodge())+
+  geom_bar(stat = "identity", position = position_dodge(width = 1))+
   theme(axis.text.x = element_text(angle = 90))+
   scale_fill_manual(values = c("turquoise","red"))+
   facet_wrap(vars(Year), scales = "free_x")+
