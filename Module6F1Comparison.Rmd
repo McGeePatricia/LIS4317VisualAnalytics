@@ -1,0 +1,118 @@
+---
+title: "LIS 4317 Module 6"
+author: "Patricia McGee"
+date: "2/20/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data Description
+
+For this assignment, I have pulled data from www.formula1.com. Specifically, I have pulled the 2020 and 2021 Driver Standings by Race for: Lewis Hamilton (Mercedes), Max Verstappen (Red Bull), Valtteri Bottas (Mercedes), Sergio Perez (Red Bull 2021, Racing Point 2020), and Alex Albon (Red Bull 2020).
+
+Here, I plan to compare the average race points for Lewis Hamilton versus Max Verstappen year over year, as well as the average race points for Mercedes versus Red Bull year over year.
+
+First, let's read in the data which I have compiled in an Excel file called "LewisvsMax.xlsx"
+
+
+```{r LewisvsMax, echo=TRUE}
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(scales)
+
+RaceData <- read_excel("LewisvsMax.xlsx")
+head(RaceData)
+
+```
+## Exploring and Manipulating the Data
+
+Now that we have read in the data, let's look at the summary of the data.
+
+From here, we will want to determine the average points by driver by year, the average points by Car team by year, as well as the standard deviations for both values.
+
+```{r Explore, echo=TRUE}
+summary(RaceData)
+
+RaceDataDriver <- RaceData %>%
+  filter(Driver == "Lewis Hamilton" | Driver == "Max Verstappen") %>%
+  group_by(Year, Driver) %>% 
+  mutate(avgDriverPts = mean(PTS),
+         sdDriverPts = sd(PTS),
+         DriverDev = (PTS - avgDriverPts)) %>%
+  ungroup()
+
+RaceDataDriver
+
+RaceDataCar <- RaceData %>%
+  filter(CAR != "RACING POINT BWT MERCEDES") %>%
+  group_by(Year, CAR) %>% 
+  mutate(avgCarPts = mean(PTS),
+          sdCarPts = sd(PTS),
+         CarDev = (PTS - avgCarPts)) %>%
+  ungroup()
+
+RaceDataCar
+
+
+  
+
+```
+
+
+## Plotting the Data by Driver
+
+Our first plot here, plots the deviation from the average points for the two drivers, Lewis Hamilton and Max Verstappen, for all races 2020 and 2021.
+
+The second plot directly compares their race points.
+
+
+```{r DriverPlots, echo=TRUE}
+RaceDataDriver %>%
+  ggplot(aes(x = `GRAND PRIX`, y = DriverDev, fill = Driver))+
+  geom_bar(stat = "identity", position = position_dodge(width = 1))+
+  theme(axis.text.x = element_text(angle = 90))+
+  scale_fill_manual(values = c("turquoise","red"))+
+  facet_wrap(vars(Year), scales = "free_x")+
+  labs(title = "Deviation from Avg Points by Driver")
+
+RaceDataDriver %>%
+  ggplot(aes(x = `GRAND PRIX`, y = PTS, fill = Driver))+
+  geom_bar(stat = "identity", position = position_dodge())+
+  theme(axis.text.x = element_text(angle = 90))+
+  scale_fill_manual(values = c("turquoise","red"))+
+  facet_wrap(vars(Year), scales = "free_x")+
+  labs(title = "Points Earned by Driver")
+
+
+```
+
+## Plotting the Data by Car Constructor
+
+Here, we have plotted the deviation from average points by Car Constructor, comparing Mercedes to Red Bull.
+
+The second plot directly compares the points earned each race.
+
+
+```{r CarPlots, echo=TRUE}
+RaceDataCar %>%
+  ggplot(aes(x = `GRAND PRIX`, y = CarDev, fill = CAR))+
+  geom_bar(stat = "identity", position = position_dodge())+
+  theme(axis.text.x = element_text(angle = 90))+
+  scale_fill_manual(values = c("turquoise","red"))+
+  facet_wrap(vars(Year), scales = "free_x")+
+  labs(title = "Deviation from Avg Points by Car Constructor")
+
+RaceDataCar %>%
+  ggplot(aes(x = `GRAND PRIX`, y = PTS, fill = CAR))+
+  geom_bar(stat = "identity", position = position_dodge())+
+  theme(axis.text.x = element_text(angle = 90))+
+  scale_fill_manual(values = c("turquoise","red"))+
+  facet_wrap(vars(Year), scales = "free_x")+
+  labs(title = "Points Earned by Car Constructor")
+
+```
+
