@@ -1,0 +1,52 @@
+---
+title: "Module 7 Distribution Analysis"
+author: "Patricia McGee"
+date: "2/27/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Assignment Instructions
+
+Create your own visual analytics based on Distribution analysis. The visual will follow our textbook recommendation to use grid to enhance the comparisons between scatter plots or your variables. Attached is data set  Download data setI used in my presentation. This data set is taken from R mtcars.  You can retrieve this data set from R by typing> mtcars
+Post the result on your blog and express your opinion about Few's recommendation.  
+How to import the data to RStudio?
+Follow this guideline: https://support.rstudio.com/hc/en-us/articles/218611977-Importing-Data-with-RStudio (Links to an external site.)
+Another great resource from Distribution is the blog by Nathan Yau - the author of our textbook Visualize This. This blog posting title: How to Visualize and Compare Distributions in R.
+https://flowingdata.com/2012/05/15/how-to-visualize-and-compare-distributions/
+
+## My Code
+
+For this assignment, I have chosen to look at the mtcars dataset. I will be looking at the distribution of cylinders using a barplot and the distribution of horsepower by cylinder using histogram from the lattice package.  
+
+```{r Code, echo=TRUE}
+carsData <- mtcars
+summary(mtcars)
+str(carsData)
+
+```
+
+## Plots
+
+Code for the plots
+
+```{r plots, echo=TRUE}
+library(ggplot2)
+
+ggplot(carsData, aes(cyl))+
+  geom_histogram(bins = 5) +
+  labs(title = "Distribution of Car Cylinders", x = "Cylinders", y = NULL)
+
+library(lattice)
+
+carsDataNew <- carsData
+carsDataNew$cyl <- as.character(carsDataNew$cyl)
+
+histogram(~hp|cyl, data = carsDataNew, layout = c(3,1), main = "Car Horsepower by Cylinder")
+
+
+```
+
