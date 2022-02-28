@@ -20,7 +20,7 @@ https://flowingdata.com/2012/05/15/how-to-visualize-and-compare-distributions/
 
 ## My Code
 
-For this assignment, I have chosen to look at the mtcars dataset. I will be looking at the distribution of cylinders using a barplot and the distribution of horsepower by cylinder using histogram from the lattice package.  
+For this assignment, I have chosen to look at the mtcars dataset. I will be looking at the distribution of cylinders using a histogram and the distribution of horsepower by cylinder using histogram from the lattice package.  
 
 ```{r Code, echo=TRUE}
 carsData <- mtcars
