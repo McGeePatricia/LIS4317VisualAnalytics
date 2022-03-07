@@ -1,0 +1,83 @@
+---
+title: "Module 8 Correlation Analysis"
+author: "Patricia McGee"
+date: "3/6/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Assignment Instructions
+
+Create your own visual analytics based on correlation or regression analysis using ggplot2. The visual will follow our textbook recommendation to use grid to enhance the comparisons between scatter plots or your variables.
+Attached is data set  Download data setPreview the documentI used in my presentation. This data set is taken from R mtcars.  
+Post the result on your blog and express your opinion about Few's recommendation.  
+How to import the data to RStudio?
+Follow this guideline: https://support.rstudio.com/hc/en-us/articles/218611977-Importing-Data-with-RStudio
+How to generate correlation analysis? From http://www.statmethods.net/stats/correlations.html 
+
+## My Code and Thoughts
+
+To start, we are using the mtcars dataset that is already preloaded in R. I am going to read this in and save it as carData before I begin my work.
+
+I will use str() to explore the structure of the data, where we can see that this is a data frame containing 32 observations of 11 variables.
+
+```{r Data, echo=TRUE}
+carData <- mtcars
+str(carData)
+```
+
+## Looking at Correlation and Plotting the Data
+
+We are going to use the ggplot2 and the reshape2 packages to analyse the correlation.
+
+
+
+```{r Packages, echo=TRUE}
+library(ggplot2)
+library(reshape2)
+
+```
+
+We will start by calculating the correlation values.
+
+```{r Correlation, echo=TRUE}
+corCars <- cor(carData)
+
+head(corCars)
+
+```
+
+Then, we will use the reshape2 package to melt this into a long data list.
+
+```{r Melt, echo=TRUE}
+meltCar <- melt(corCars)
+
+head(meltCar)
+```
+
+Now, we can map this as a heat map using ggplot showing all the variables.
+
+Another way we can look at this is to do scatterplots on 2 variables at a time.
+
+```{r Plots, echo=TRUE}
+# First we have a heat map
+ggplot(meltCar, aes(Var1, Var2, fill = value))+
+  geom_tile()+
+  ggtitle("Heat Map of Correlation Analysis of mtcars dataset")
+
+# scatter plots
+ggplot(carData, aes(hp, mpg))+
+  geom_point()+
+  geom_smooth()+
+  ggtitle("Correlation Analysis Scatterplot of MPG by HP")
+
+ggplot(carData, aes(wt, mpg))+
+  geom_point()+
+  geom_smooth()+
+  ggtitle("Correlation Analysis Scatterplot of MPG by Wt")
+
+```
+
