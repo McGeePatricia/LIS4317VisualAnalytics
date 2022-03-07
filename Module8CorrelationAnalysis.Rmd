@@ -31,7 +31,7 @@ str(carData)
 
 ## Looking at Correlation and Plotting the Data
 
-We are going to use the ggplot2 and the reshape2 packages to analyse the correlation.
+We are going to use the ggplot2 and the reshape2 packages to analyze the correlation.
 
 
 
