@@ -1,0 +1,49 @@
+---
+title: "Module 9 Multivariate Analysis"
+author: "Patricia McGee"
+date: '2022-03-13'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## The Assignment Instructions
+
+Module # 9 assignment
+
+Create your own multi-variates visualization graph (RStudio, ggplot2, Adobe Illustrator, Plotly or Tableau). You can use your own data you find or use the data we employ in class. In your discussion on your blog, judge if multivariables is a good way to visualize the outcome or not and discuss how you can implement the 5 principles/rules of design to your work, I covered in this module's presentation.  I also want to add last year student: Brett Waugh assignment for this module : https://advancedstats1337.wordpress.com/2019/03/11/visual-multi-variances-analysis/ (Links to an external site.) 
+i hope that will give you better sense what I am looking for.
+
+## My Data and Code
+
+For this assignment, I will be using the mtcars dataset. 
+First we read in the data and save it as mydata.
+Then, we need to convert this to a matrix, which is done using as.matrix.
+
+Now we can start to visualize this as a heat map.
+
+```{r data, echo=TRUE}
+mydata <- mtcars
+mydata <- as.matrix(mydata)
+heatmap(mydata)
+
+```
+
+## Refining our Heat Map
+
+Our first heat map above doesn't give us good detail due to the differing scales of the data. We need to normalize the data in the columns, which is done by adding a scale. 
+
+```{r plot2, echo=TRUE}
+heatmap(mydata, scale = "column")
+```
+
+This looks better, however we still have the dendrograms and the different sorting.
+Lets remove the dendrograms to make this easier to view, and reset the sorting.
+
+```{r plot3, echo=TRUE}
+heatmap(mydata, scale = "column", Rowv = NA, Colv = NA)
+```
+
+Now we can visually compare the different variables across the different cars. 
