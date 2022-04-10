@@ -1,0 +1,50 @@
+---
+title: "Module 12"
+author: "Patricia McGee"
+date: '2022-04-10'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## The Assignment
+
+Your assignment is to create your first visual Social Network analysis. You can select from any two platforms you feel more comfortable with. The first is called NodeXL (Links to an external site.). It is based on Microsoft Excel support platform. To download NodeXL package for Microsoft Excel click here (Links to an external site.) (Links to an external site.)Links to an external site.. Make sure you have Microsoft Excel in your computer. For full documentation on how to use NodeXL, click here (Links to an external site.) (Links to an external site.)Links to an external site.. (https://www.smrfoundation.org/nodexl/ (Links to an external site.))
+The second option is using Rstudio. In my presentation, I used ggnet2: network visualization with ggplot2. The creator of this page is Ehsan Aghaei. (Links to an external site.)Links to an external site. You can find the full documentation on his code on his GitHub site: https://briatte.github.io/ggnet/ (Links to an external site.)Links to an external site.
+
+>install.packages("GGally")
+>library(GGally)
+>library(network)
+>library(sna)
+>library(ggplot2)
+>net = rgraph(10, mode = "graph", tprob = 0.5) net = network(net, directed = FALSE)
+>network.vertex.names(net) = letters[1:10]
+>ggnet2(net)
+>ggnet2(net, node.size = 6, node.color = "black", edge.size = 1, edge.color = "grey")
+
+In your blog, you will report on the success and failure you had to create Social Network visualization.
+
+## My Code
+
+
+```{r code, echo=TRUE}
+#install.packages("GGally")
+#install.packages("network")
+#install.packages("sna")
+library(GGally)
+library(network)
+library(sna)
+library(ggplot2)
+net = rgraph(10, mode = "graph", tprob = 0.5) 
+net = network(net, directed = FALSE)
+network.vertex.names(net) = letters[1:10]
+ggnet2(net)
+ggnet2(net, node.size = 6, node.color = "black", edge.size = 1, edge.color = "grey")
+net %v% "phono" = ifelse(letters[1:10] %in% c("a", "e", "i"), "vowel", "consonant")
+ggnet2(net, size = 10, color = "phono", edge.size = 0.5, palette = "Set2", label = TRUE)
+
+```
+
+
