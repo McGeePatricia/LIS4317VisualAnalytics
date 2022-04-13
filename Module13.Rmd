@@ -1,0 +1,73 @@
+---
+title: "Module 13"
+author: "Patricia McGee"
+date: '2022-04-12'
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## The Assignment
+
+Your assignment:
+
+Create a simple animation and discussion the result in your blog posting. 
+Reference to Yihui Xie's and animation R package website, click here. A note, his package now available via CRAM repository and not GitHub.  For Bryan's blog posting on Animation in R, click here 
+A note: In order to post your work on blog, you need to save your animation.
+The code for saving the image you created in R is as follow:
+saveGIF({
+    for (i in 1:10) plot(runif(10), ylim = 0:1)
+})
+
+## My Work
+
+I am going to create an animated plot with the gapminder data. I will filter to include only data for the following countries: China, France, Germany, United Kingdom, and United States. I plan to show the change in population and change in life expectancy over time.
+
+
+```{r code, echo=TRUE}
+#install.packages("animation")
+library(animation)
+library(gapminder)
+library(dplyr)
+library(ggplot2)
+library(gganimate)
+
+mydata <- gapminder
+
+mydata <- mydata %>%
+  filter(country %in% c("China","France","Germany","United Kingdom","United States"))
+
+```
+
+## Creating our Animated Plot using animate Package
+
+My first animation is using the animate package. Unfortunately, this package does not have clear instructions on how to set this up, so I have been unable to generate a graph other than the example provided by Dr. Friedman.
+
+
+```{r animate, echo=TRUE}
+saveGIF({
+    for (i in 1:10) plot(runif(10), ylim = 0:1)
+}, movie.name = "animationsample.gif")
+
+```
+
+## Creating an Animation using gganimate Package
+
+For my second plot, I am going to use the gganimate package, which works with ggplot. This package is much easier to work with.
+
+```{r gganimate, echo=TRUE}
+ggplot(mydata, aes(year,lifeExp, color = country))+
+  geom_line()+
+  geom_point()+
+  labs(title = "Country Life Expectancy by Year", x = "Year", y = "Life Expectancy")+
+  transition_reveal(year)+
+  ease_aes("linear")
+
+anim_save("gganimateplot.gif")
+
+```
+
