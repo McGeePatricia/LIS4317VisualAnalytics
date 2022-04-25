@@ -1,0 +1,120 @@
+---
+title: "LIS 4317 Final Project"
+author: "Patricia McGee"
+date: '2022-04-25'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## The Assignment
+
+
+
+## My Information and Code
+
+I have decided to use the Beer Profile and Ratings Dataset from Kaggle: https://www.kaggle.com/ruthgn/beer-profile-and-ratings-data-set
+
+I will read in the csv file "beer_profile_and_ratings.csv" and save this as beers.
+
+
+```{r data, echo=TRUE}
+beers <- read.csv("beer_profile_and_ratings.csv")
+head(beers)
+summary(beers)
+
+```
+
+## Exploring and Cleaning the Data
+
+First, we need to narrow this dataset down for our purposes. There are currently 3197 observations. 
+
+We remove some fields that we don't need. We will remove Description and the Min.IBU and Max.IBU.
+
+Then we will filter this to only select Styles. I have chosen 8 beer styles that I enjoy. They are: 
+Blonde Ale - Belgian
+Cream Ale
+Lager - American
+Pumpkin Beer
+Red Ale - Irish
+Stout - Irish Dry
+Stout - Sweet / Milk
+Wheat Beer - Hefeweizen
+
+This brings us down to 248 observations. 
+
+
+```{r cleaning, echo=TRUE}
+library(dplyr)
+beers <- beers[,-7:-8]
+beers <- beers[,-5]
+
+beers <- beers %>%
+  rename(Name = ï..Name, FullBeerName = Beer.Name..Full.)
+
+beers_filtered <- beers %>%
+  filter(Style %in% c("Blonde Ale - Belgian","Cream Ale","Lager - American","Pumpkin Beer","Red Ale - Irish","Stout - Irish Dry","Stout - Sweet / Milk","Wheat Beer - Hefeweizen"))
+
+top_beers <- beers_filtered %>%
+  arrange(desc(review_overall))%>%
+  top_n(n = 10, review_overall)
+
+topABVbeers <- beers_filtered %>%
+  arrange(desc(ABV))%>%
+  top_n(n = 10, ABV)
+
+
+```
+
+
+## Plots
+
+I chose to create plots showing the top 10 beers by overall rating and the top 10 beers by ABV. I also created a box plot showing the range of the overall rating by beer style for the 8 selected styles and a linear regression line showing the ABV for each beer style.
+
+```{r plots, echo=TRUE}
+library(ggplot2)
+library(stringr)
+library(forcats)
+
+ggplot(beers_filtered, aes(Style, review_overall))+
+  geom_boxplot()+
+  coord_flip()+
+  theme_minimal()+
+  labs(title = "Overall Ratings of Specific Beer Styles", x = "Beer Style", 
+       y = "Overall Rating: Scale of 1-5")
+
+ggplot(beers_filtered, aes(review_overall, ABV))+
+  geom_point(size = 1, alpha = 0.8, aes(color = Style))+
+  geom_smooth(size = 0.6, aes(color = Style, fill = Style))+
+  theme_minimal()+
+  scale_color_brewer(palette = "Set2")+
+  scale_fill_brewer(palette = "Set2")+
+  facet_wrap(vars(Style))+
+  labs(title = "Alcohol by Volume (ABV) and Overall Rating of Specific Beer Styles", 
+       x = "Overall Rating: Scale of 1-5", y = "Alcohol by Volume (ABV) %")
+
+top_beers %>%
+  mutate(Beer = fct_reorder(Name,review_overall)) %>%
+  ggplot(aes(review_overall, Beer))+
+  geom_col(aes(fill = Style))+
+  coord_cartesian(xlim = c(4.2,4.6))+
+  scale_fill_brewer(palette = "Set2")+
+  scale_y_discrete(labels = function(y) str_wrap(y, width = 30))+
+  labs(title = "Top 10 Rated Beers of Selected Styles")+
+  theme_minimal()
+
+topABVbeers %>%
+  mutate(Beer = fct_reorder(Name,ABV))%>%
+  ggplot(aes(Beer, ABV))+
+  geom_col(aes(fill = Style))+
+  coord_flip()+
+  scale_fill_brewer(palette = "Set2")+
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 30))+
+  labs(title = "Top 10 Beers by ABV with Beer Style")+
+  theme_minimal()
+
+
+```
+
