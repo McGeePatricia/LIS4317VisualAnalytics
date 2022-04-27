@@ -1,7 +1,7 @@
 ---
 title: "LIS 4317 Final Project"
 author: "Patricia McGee"
-date: '2022-04-25'
+date: '2022-04-26'
 output: html_document
 ---
 
@@ -11,7 +11,32 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## The Assignment
 
+### The Project outline
 
+Each student in the class will create his/her visual project. The student will share the link on Canvas. The grade for the final project will be scored based on your instructor and your classmates peer review comments and grades. 
+
+### Objectives
+
+The purpose of this project is to apply what you’ve learned in this class: design and statistical analysis apparatus. Your project needs to capture any type of data based on your interest and utilize plot.ly, Tableau or Rstudio. The software you picked has to be covered in class in order to tell a story of your data analysis you selected. You can employ any of the techniques and practices we outline in the class. From Time series analysis, part to whole, ranking, deviation analysis, distribution, correlation, multivariate, and even promising trends as discussed in Chapter 13 in our textbook.
+
+#### Step 1. 
+
+Begin searching for a dateset that captivates your interest. Your dataset should contain at least 50 observations and 5 to 20 variables.
+
+#### Step 2.
+
+You will provide a written documentation of your project objectives and accomplishments that will include a general research question and objectives. Those questions will contain your underlying theme of your project as outline below.
+
+Short summary:
+
+Problem description: Give a brief but precise description or definition of the problem or
+hypothesis you set  to evaluate.
+Related work: How does this problem and the method relate to the problems/methods have addressed in the Provide example of existing visual analytics that you liked.
+Solution: How did you solve the problem? Describe the technical approach. Tell us what methodology you will take: Time series analysis, part to whole, ranking, deviation analysis, distribution, correlation, multivariate, and even promising trends.
+
+#### Step 3.
+
+Create a visualization of your data and discussion to your output. You can use any of the apps we covered in the class including: plot.ly, Tableau, RStudio and Python.   
 
 ## My Information and Code
 
@@ -78,7 +103,9 @@ library(ggplot2)
 library(stringr)
 library(forcats)
 
-ggplot(beers_filtered, aes(Style, review_overall))+
+beers_filtered %>%
+  mutate(BeerStyle = fct_reorder(Style, review_overall))%>%
+  ggplot(aes(BeerStyle, review_overall))+
   geom_boxplot()+
   coord_flip()+
   theme_minimal()+
@@ -96,23 +123,23 @@ ggplot(beers_filtered, aes(review_overall, ABV))+
        x = "Overall Rating: Scale of 1-5", y = "Alcohol by Volume (ABV) %")
 
 top_beers %>%
-  mutate(Beer = fct_reorder(Name,review_overall)) %>%
+  mutate(Beer = fct_reorder(FullBeerName,review_overall)) %>%
   ggplot(aes(review_overall, Beer))+
   geom_col(aes(fill = Style))+
   coord_cartesian(xlim = c(4.2,4.6))+
   scale_fill_brewer(palette = "Set2")+
   scale_y_discrete(labels = function(y) str_wrap(y, width = 30))+
-  labs(title = "Top 10 Rated Beers of Selected Styles")+
+  labs(title = "Top 10 Rated Beers of Selected Styles", y = "Beer Name", x = "Overall Rating: Scale of 1-5")+
   theme_minimal()
 
 topABVbeers %>%
-  mutate(Beer = fct_reorder(Name,ABV))%>%
+  mutate(Beer = fct_reorder(FullBeerName,ABV))%>%
   ggplot(aes(Beer, ABV))+
   geom_col(aes(fill = Style))+
   coord_flip()+
   scale_fill_brewer(palette = "Set2")+
   scale_x_discrete(labels = function(x) str_wrap(x, width = 30))+
-  labs(title = "Top 10 Beers by ABV with Beer Style")+
+  labs(title = "Top 10 Beers by ABV with Beer Style", x = "Beer Name", y = "% ABV")+
   theme_minimal()
 
 
