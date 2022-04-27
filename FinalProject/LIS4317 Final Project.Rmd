@@ -2,7 +2,9 @@
 title: "LIS 4317 Final Project"
 author: "Patricia McGee"
 date: '2022-04-26'
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -80,7 +82,9 @@ beers <- beers %>%
   rename(Name = ï..Name, FullBeerName = Beer.Name..Full.)
 
 beers_filtered <- beers %>%
-  filter(Style %in% c("Blonde Ale - Belgian","Cream Ale","Lager - American","Pumpkin Beer","Red Ale - Irish","Stout - Irish Dry","Stout - Sweet / Milk","Wheat Beer - Hefeweizen"))
+  filter(Style %in% c("Blonde Ale - Belgian","Cream Ale","Lager - American",
+                      "Pumpkin Beer","Red Ale - Irish","Stout - Irish Dry",
+                      "Stout - Sweet / Milk","Wheat Beer - Hefeweizen"))
 
 top_beers <- beers_filtered %>%
   arrange(desc(review_overall))%>%
@@ -129,7 +133,8 @@ top_beers %>%
   coord_cartesian(xlim = c(4.2,4.6))+
   scale_fill_brewer(palette = "Set2")+
   scale_y_discrete(labels = function(y) str_wrap(y, width = 30))+
-  labs(title = "Top 10 Rated Beers of Selected Styles", y = "Beer Name", x = "Overall Rating: Scale of 1-5")+
+  labs(title = "Top 10 Rated Beers of Selected Styles", y = "Beer Name", 
+       x = "Overall Rating: Scale of 1-5")+
   theme_minimal()
 
 topABVbeers %>%
